@@ -43,9 +43,11 @@
                 <thead>
                     <tr>
                         <th class="text-center">Id</th>
+                        <th class="text-center">Contrato</th>
                         <th class="text-center">CNPJ</th>
                         <th class="text-center">Razao Social</th>
                         <th class="text-center">Nome Fantasia</th>
+                        <th class="text-center">Status</th>
                         <th></th>
                         <th></th>
                     </tr>
@@ -54,9 +56,11 @@
                     @for($i = 0; $i < count($clientes); $i++)
                         <tr>
                             <td class="text-center">{{ $clientes[$i]["id"] }}</td>
+                            <td class="text-center">{{ $clientes[$i]["contrato"] }}</td>
                             <td class="text-center">{{ $clientes[$i]["cnpj"] }}</td>
                             <td class="text-center">{{ $clientes[$i]["cliente"] }}</td>
                             <td class="text-center">{{ $clientes[$i]["fantasia"] }}</td>
+                            <td class="text-center">{{ $clientes[$i]["status"] }}</td>
                             <td class="text-right">
                                 <button class="btn btn-primary btn-sm">Detalhes</button>
                             </td>
@@ -65,8 +69,10 @@
                                     @csrf
                                     @php
                                         $idCliente = $clientes[$i]["id"];
+                                        $contrato = $clientes[$i]["contrato"];
                                     @endphp
                                     <input type="hidden" name="idCliente" id="idCliente" value="{{ $idCliente }}"/>
+                                    <input type="hidden" name="contrato" id="contrato" value="{{ $contrato }}"/>
                                     <button type="submit" class="btn btn-success btn-sm">Selecionar</button>
                                 </form>
                             </td>

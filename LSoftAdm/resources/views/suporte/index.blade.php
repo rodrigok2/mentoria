@@ -16,18 +16,20 @@
                     $idCliente = $clientes[0]["id"];
                     $cpnjCliente = $clientes[0]["cnpj"];
                     $cliente = $clientes[0]["cliente"];
+                    $contrato = $clientes[0]["contrato"];
                 }
                 else
                 {
                     $idCliente = "";
                     $cpnjCliente = "";
                     $cliente = "";
+                    $contrato = "";
                 }
             @endphp
             <label style="width: 100px; text-align: right;" for="idCliente">Id:</label>
             <input style="width: 100px" type="text" name="idCliente" id="idCliente" disabled="true"  value="{{ $idCliente }}"/>
             <label style="width: 100px; text-align: right;" for="contrato">Contrato:</label>
-            <input style="width: 100px" type="text" name="contrato" id="contrato" value="" disabled="true"/>
+            <input style="width: 100px" type="text" name="contrato" id="contrato" value="{{ $contrato }}" disabled="true"/>
             <label style="width: 150px; text-align: right;" for="cnpj">CNPJ:</label>
             <input style="width: 300px" type="text" name="cnpj" id="cnpj" value="{{ $cpnjCliente }}" disabled="true"/>
             <p></p>
@@ -47,6 +49,10 @@
         <form method="POST" action="index" style="border: 1px solid #b7c1d1">
             @csrf
             <div class="input-group input-group-sm mb-3">
+
+                <!--CAMPO CONTRATO HIDDEN-->
+                <input type="hidden" name="contrato" id="contrato" value="{{ $contrato }}"/>
+
                 <!--FILTRO DE DATAS DE ABERTURA DA OS-->
                 <h6 class="col-12 text-center"><b>Data de abertura</b></h6>
                 <div class="col-2 text-right">
@@ -113,6 +119,17 @@
                         @endforeach
                     </select>
                 </div>
+                <div class="col-2 text-right">
+                    <label for="prioridade">Prioridade:</label>
+                </div>
+                <div class="col-3 text-left">
+                    <select class="form-select form-select-sm" id="prioridade" name="prioridade" value="">
+                        <option value="">todas</option>
+                        @foreach ($prioridadesList as $item)
+                            <option value="{{ $item['id'] }}">{{ $item['descricao'] }}</option>
+                        @endforeach
+                    </select>
+                </div>
             </div>
             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                 <button style="width: 100px" type="submit" class="btn btn-primary btn-sm">Filtrar</button>
@@ -157,6 +174,7 @@
                             <th class="text-center">Cliente</th>
                             <th class="text-center">Tecnico</th>
                             <th class="text-center">Prioridade</th>
+                            <th class="text-center">Classificação</th>
                             <th class="text-center">Descrição</th>
                             <th></th>
                         </tr>
@@ -180,6 +198,7 @@
                                 @else
                                     <td>{{ $osList[$i]["prioridade"] }}</td>
                                 @endif
+                                <td>{{ $osList[$i]["classificacao"] }}</td>
                                 <td>{{ $osList[$i]["descricao"] }}</td>
                                 <td class="text-right">
                                     <a href="{{ route('suporte.detalhes') }}">Detalhes</a>

@@ -23,16 +23,24 @@ class ClienteRepository
 
         $razaoSocial = $dadosRequest["razaoSocial"] == null ?
             "" :
-            " AND sis_clientes.fantasia LIKE '%".$dadosRequest["razaoSocial"]."%'";
+            " AND sis_clientes.nome LIKE '%".$dadosRequest["razaoSocial"]."%'";
+
+        $contrato = $dadosRequest["contrato"] == null ?
+            "" :
+            " AND sis_contratos.id = ".$dadosRequest["contrato"];
 
 
         $list = DB::connection('mysqlSUL')
-        ->select('SELECT sis_clientes.id,
+        ->select("SELECT sis_clientes.id,
                     sis_clientes.cpf AS cnpj,
                     sis_clientes.fantasia,
-                    sis_clientes.nome AS cliente
+                    sis_clientes.nome AS cliente,
+                    sis_contratos.id AS contrato,
+                    sis_contratos.status AS status
                     FROM sis_clientes
-                    WHERE sis_clientes.id is not null'.$id.$cnpj.$fantasia.$razaoSocial);
+                    JOIN sis_contratos ON sis_clientes.id = sis_contratos.cliente
+                    WHERE sis_clientes.id is not null AND sis_contratos.status <> 'Cancelado'".$id.$cnpj.$fantasia.$razaoSocial.$contrato."
+                    ORDER BY sis_contratos.id");
 
         $array = json_decode(json_encode($list), true);
 

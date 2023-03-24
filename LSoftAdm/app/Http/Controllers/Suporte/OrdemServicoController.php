@@ -8,6 +8,7 @@ use App\Repositories\TecnicoRepository;
 use App\Repositories\TipoOrdemServicoRepository;
 use App\Repositories\OrdemServicoRepository;
 use App\Repositories\ClienteRepository;
+use App\Repositories\PrioridadeRepository;
 
 class OrdemServicoController extends Controller
 {
@@ -15,16 +16,18 @@ class OrdemServicoController extends Controller
     {
         $tiposList = $this->TiposOrdemBD();
         $tecnicosList = $this->TecnicosBD();
+        $prioridadesList = $this->PrioridadesBD();
         $osList = null;
         $clientes = null;
 
-        return view ('suporte.index', compact('tecnicosList','tiposList','osList', 'clientes'));
+        return view ('suporte.index', compact('tecnicosList','tiposList','osList', 'clientes', 'prioridadesList'));
     }
 
     public function filtrar(Request $request)
     {
         $tiposList = $this->TiposOrdemBD();
         $tecnicosList = $this->TecnicosBD();
+        $prioridadesList = $this->PrioridadesBD();
         $osList = null;
         $clientes = null;
 
@@ -36,11 +39,13 @@ class OrdemServicoController extends Controller
             "status" => $request->status,
             "tecnico" => $request->tecnico,
             "classificacao" => $request->classificacao,
+            "contrato" => $request->contrato,
+            "prioridade" => $request->prioridade
         ];
 
         $osList = $this->OrdensServicoBD($dadosRequest);
 
-        return view ('suporte.index', compact('tecnicosList','tiposList','osList', 'clientes'));
+        return view ('suporte.index', compact('tecnicosList','tiposList','osList', 'clientes', 'prioridadesList'));
     }
 
     public function clientes ()
@@ -56,6 +61,7 @@ class OrdemServicoController extends Controller
             "cnpj" => $request->cnpj,
             "fantasia" => $request->fantasia,
             "razaoSocial" => $request->cliente,
+            "contrato" => null,
         ];
 
         if($dadosRequest["id"] == null && $dadosRequest["cnpj"] == null && $dadosRequest["fantasia"] == null && $dadosRequest["razaoSocial"] == null)
@@ -78,13 +84,16 @@ class OrdemServicoController extends Controller
             "cnpj" => null,
             "fantasia" => null,
             "razaoSocial" => null,
+            "contrato" => $request->contrato,
         ];
+
         $clientes = $this->ClientesBD($dadosRequest);
         $tiposList = $this->TiposOrdemBD();
         $tecnicosList = $this->TecnicosBD();
+        $prioridadesList = $this->PrioridadesBD();
         $osList = null;
 
-        return view ('suporte.index', compact('tecnicosList','tiposList','osList', 'clientes'));
+        return view ('suporte.index', compact('tecnicosList','tiposList','osList', 'clientes', 'prioridadesList'));
     }
 
     public function TiposOrdemBD ()
@@ -112,6 +121,13 @@ class OrdemServicoController extends Controller
     {
         $clienteRepository = new ClienteRepository();
         $list = $clienteRepository->BuscarCliente($array);
+        return $list;
+    }
+
+    public function PrioridadesBD ()
+    {
+        $prioridadeRepository = new PrioridadeRepository();
+        $list = $prioridadeRepository->PrioridadesList();
         return $list;
     }
 

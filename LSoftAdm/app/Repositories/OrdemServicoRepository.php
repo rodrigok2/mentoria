@@ -36,6 +36,14 @@ class OrdemServicoRepository
             "" :
             " AND sis_os_tipos.id = ".$dadosRequest["classificacao"];
 
+        $contrato = $dadosRequest["contrato"] == null ?
+            "" :
+            " AND sis_os.contrato = ".$dadosRequest["contrato"];
+
+        $prioridade = $dadosRequest["prioridade"] == null ?
+            "" :
+            " AND sis_prioridades.id = ".$dadosRequest["prioridade"];
+
 
         $list = DB::connection('mysqlSUL')
         ->select("SELECT
@@ -57,7 +65,7 @@ class OrdemServicoRepository
         JOIN sis_contratos ON sis_os.contrato = sis_contratos.id
         JOIN sis_clientes ON sis_contratos.cliente = sis_clientes.id
         JOIN sis_prioridades ON sis_prioridades.id = sis_os.prioridade_tarefa_redmine
-        WHERE ".$status.$dataAberturaInicio.$dataAberturaFim.$dataFechamentoInicio.$dataFechamentoFim.$tecnico.$classificacao.' ORDER BY sis_os.id');
+        WHERE ".$status.$dataAberturaInicio.$dataAberturaFim.$dataFechamentoInicio.$dataFechamentoFim.$tecnico.$classificacao.$contrato.$prioridade.' ORDER BY sis_os.id');
 
         $array = json_decode(json_encode($list), true);
 
